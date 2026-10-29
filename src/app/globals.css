@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/*
+ * Fresco: verde palta, amarillo yema y crema de cáscara de huevo.
+ * Botones grandes y altos para usarla con una mano mientras se reparte.
+ */
+@theme {
+  --color-crema: #fbf7ee;
+  --color-cascara: #f3ead8;
+  --color-palta: #3f6b22;
+  --color-palta-oscura: #2b4a16;
+  --color-palta-clara: #a6cf5a;
+  --color-brote: #e6f1d3;
+  --color-yema: #f4b52a;
+  --color-yema-clara: #fdecc0;
+  --color-tinta: #22301a;
+  --color-tinta-suave: #5c6852;
+  --color-linea: rgb(34 48 26 / 0.1);
+  --color-deuda: #c9532f;
+  --color-deuda-clara: #fbe4da;
+  --color-ok: #3e9c5c;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-crema);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+}
+
+/* números que no bailan al cambiar */
+.cifra {
+  font-variant-numeric: tabular-nums;
+}
+
+/* al tocar: se hunde un poco, para que se note en un video */
+.toque {
+  transition: transform 160ms ease, background-color 200ms ease, box-shadow 200ms ease;
+}
+.toque:active {
+  transform: scale(0.96);
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.entrar {
+  animation: entrar 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrar {
+    animation: none;
+  }
+}
