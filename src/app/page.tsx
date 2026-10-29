@@ -67,14 +67,14 @@ export default function Inicio() {
                     <p className="truncate text-[13.5px] text-tinta-suave">
                       {p.lineas.map((l) => cantidad(l.cantidad, datos.productos.find((x) => x.id === l.productoId)?.unidad ?? "")).join(" · ")} · {pesos(totalPedido(p))}
                     </p>
-                    <div className="mt-1.5">{debe > 0 ? <Etiqueta tono="deuda">Por cobrar {pesos(debe)}</Etiqueta> : <Etiqueta tono="ok">Pagado</Etiqueta>}</div>
+                    <div className="mt-1.5">{debe <= 0 ? <Etiqueta tono="ok">✓ Pagado</Etiqueta> : p.pagado > 0 ? <Etiqueta tono="deuda">Pagó {pesos(p.pagado)} · debe {pesos(debe)}</Etiqueta> : <Etiqueta tono="deuda">Fiado · debe {pesos(debe)}</Etiqueta>}</div>
                   </div>
                   <button
                     type="button"
                     onClick={() => marcarEntregado(p.id, true)}
-                    className="toque flex h-12 shrink-0 items-center gap-1.5 rounded-full bg-brote px-4 text-[14px] font-semibold text-palta"
+                    className="toque flex h-12 shrink-0 items-center gap-1.5 rounded-full bg-palta px-3.5 text-[13.5px] font-semibold text-crema"
                   >
-                    <Icono nombre="check" size={20} /> Entregado
+                    <Icono nombre="check" size={20} /> Marcar entregado
                   </button>
                 </Tarjeta>
               </li>

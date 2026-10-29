@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState } from "react";
+import FormCliente from "@/components/FormCliente";
 import { Cargando, Etiqueta, Icono, Pantalla, Tarjeta, Titulo } from "@/components/ui";
 import { fechaCorta, whatsapp } from "@/lib/calculos";
 import { useDatos } from "@/lib/datos";
@@ -11,6 +13,7 @@ import { deudaPedido, pesos, totalPedido } from "@/lib/tipos";
 export default function Ficha() {
   const { id } = useParams<{ id: string }>();
   const { datos, listo } = useDatos();
+  const [editando, setEditando] = useState(false);
   if (!listo) return <Pantalla titulo="Cliente" atras="/clientes"><Cargando /></Pantalla>;
 
   const c = datos.clientes.find((x) => x.id === id);
@@ -21,8 +24,19 @@ export default function Ficha() {
   const comprado = pedidos.reduce((s, p) => s + totalPedido(p), 0);
   const producto = (pid: string) => datos.productos.find((p) => p.id === pid);
 
+  if (editando)
+    return (
+      <Pantalla titulo="Editar cliente" atras="/clientes">
+        <FormCliente inicial={c} onListo={() => setEditando(false)} />
+      </Pantalla>
+    );
+
   return (
-    <Pantalla titulo={c.nombre} atras="/clientes">
+    <Pantalla
+      titulo={c.nombre}
+      atras="/clientes"
+      accion={<button type="button" onClick={() => setEditando(true)} className="toque rounded-full border border-linea bg-white px-4 py-2 text-[14px] font-medium">Editar</button>}
+    >
       <div className="flex flex-wrap gap-1.5">
         <Etiqueta tono={c.tipo === "mayorista" ? "yema" : "neutro"}>{c.tipo === "mayorista" ? "Precio mayorista" : "Precio detalle"}</Etiqueta>
         {debe > 0 && <Etiqueta tono="deuda">Debe {pesos(debe)}</Etiqueta>}
@@ -58,7 +72,7 @@ export default function Ficha() {
               </span>
               <span className="text-right">
                 <span className="cifra block font-semibold">{pesos(totalPedido(p))}</span>
-                {deudaPedido(p) > 0 ? <Etiqueta tono="deuda">Debe {pesos(deudaPedido(p))}</Etiqueta> : <Etiqueta tono="ok">Pagado</Etiqueta>}
+                {deudaPedido(p) <= 0 ? <Etiqueta tono="ok">✓ Pagado</Etiqueta> : p.pagado > 0 ? <Etiqueta tono="deuda">Pagó {pesos(p.pagado)} · debe {pesos(deudaPedido(p))}</Etiqueta> : <Etiqueta tono="deuda">Fiado · debe {pesos(deudaPedido(p))}</Etiqueta>}
               </span>
             </Tarjeta>
           </li>

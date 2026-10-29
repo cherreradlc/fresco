@@ -125,7 +125,7 @@ export function Etiqueta({ children, tono = "neutro" }: { children: ReactNode; t
     ok: "bg-brote text-palta",
     yema: "bg-yema-clara text-[#8a5c00]",
   }[tono];
-  return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{children}</span>;
+  return <span className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{children}</span>;
 }
 
 export function Titulo({ children, accion }: { children: ReactNode; accion?: ReactNode }) {
@@ -140,4 +140,29 @@ export function Titulo({ children, accion }: { children: ReactNode; accion?: Rea
 /** Mientras se leen los datos del celular. */
 export function Cargando() {
   return <div className="mt-10 h-32 animate-pulse rounded-[20px] bg-cascara" />;
+}
+
+/**
+ * El estado de un pedido en dos líneas que se leen solas:
+ * Entrega: pendiente / entregado · Pago: pagado / pagó una parte / fiado.
+ */
+export function EstadoPedido({ entregado, total, pagado }: { entregado: boolean; total: number; pagado: number }) {
+  const fmt = (n: number) => "$" + Math.round(n).toLocaleString("es-CL");
+  const debe = total - pagado;
+  return (
+    <dl className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1.5 text-[13.5px]">
+      <dt className="text-tinta-suave">Entrega</dt>
+      <dd>{entregado ? <Etiqueta tono="ok">✓ Entregado</Etiqueta> : <Etiqueta tono="yema">⏳ Pendiente</Etiqueta>}</dd>
+      <dt className="text-tinta-suave">Pago</dt>
+      <dd>
+        {debe <= 0 ? (
+          <Etiqueta tono="ok">✓ Pagado</Etiqueta>
+        ) : pagado > 0 ? (
+          <Etiqueta tono="deuda">Pagó {fmt(pagado)} · debe {fmt(debe)}</Etiqueta>
+        ) : (
+          <Etiqueta tono="deuda">Fiado · debe {fmt(debe)}</Etiqueta>
+        )}
+      </dd>
+    </dl>
+  );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Cargando, Etiqueta, Pantalla, Tarjeta } from "@/components/ui";
+import { Cargando, EstadoPedido, Pantalla, Tarjeta } from "@/components/ui";
 import { fechaCorta, mismoDia } from "@/lib/calculos";
 import { useDatos } from "@/lib/datos";
 import { cantidad, deudaPedido, pesos, totalPedido } from "@/lib/tipos";
@@ -38,7 +38,6 @@ export default function Pedidos() {
 
       <ul className="mt-4 flex flex-col gap-2.5">
         {lista.map((p) => {
-          const debe = deudaPedido(p);
           return (
             <li key={p.id} className="entrar">
               <Tarjeta>
@@ -52,14 +51,11 @@ export default function Pedidos() {
                 <p className="mt-2 text-[14px] text-tinta-suave">
                   {p.lineas.map((l) => `${producto(l.productoId)?.emoji} ${cantidad(l.cantidad, producto(l.productoId)?.unidad ?? "")}`).join("   ")}
                 </p>
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex gap-1.5">
-                    {debe > 0 ? <Etiqueta tono="deuda">Debe {pesos(debe)}</Etiqueta> : <Etiqueta tono="ok">Pagado</Etiqueta>}
-                    {p.entregado ? <Etiqueta>Entregado</Etiqueta> : <Etiqueta tono="yema">Por entregar</Etiqueta>}
-                  </div>
+                <div className="mt-3 flex flex-col gap-3">
+                  <EstadoPedido entregado={p.entregado} total={totalPedido(p)} pagado={p.pagado} />
                   {!p.entregado && (
-                    <button type="button" onClick={() => marcarEntregado(p.id, true)} className="toque rounded-full bg-brote px-3.5 py-2 text-[13.5px] font-semibold text-palta">
-                      Entregado
+                    <button type="button" onClick={() => marcarEntregado(p.id, true)} className="toque h-11 rounded-[14px] bg-palta text-[14.5px] font-semibold text-crema">
+                      Marcar entregado
                     </button>
                   )}
                 </div>

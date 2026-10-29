@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Cargando, Etiqueta, Pantalla } from "@/components/ui";
 import { deudores, diasDesde, haceDias } from "@/lib/calculos";
 import { useDatos } from "@/lib/datos";
-import { pesos } from "@/lib/tipos";
+import { cantidad, pesos } from "@/lib/tipos";
 
 /** Todos los clientes; avisa quién dejó de comprar para llamarlo. */
 export default function Clientes() {
@@ -18,7 +18,16 @@ export default function Clientes() {
   const lista = datos.clientes.filter((c) => c.nombre.toLowerCase().includes(busca.toLowerCase())).sort((a, b) => a.nombre.localeCompare(b.nombre));
 
   return (
-    <Pantalla titulo="Clientes" atras="/mas">
+    <Pantalla
+      titulo="Clientes"
+      atras="/mas"
+      accion={<Link href="/clientes/nuevo" className="toque rounded-full bg-palta px-4 py-2.5 text-[14.5px] font-semibold text-crema">+ Nuevo</Link>}
+    >
+      {/* la regla del precio por mayor, siempre a la vista */}
+      <div className="mb-3 rounded-[16px] bg-yema-clara px-4 py-3 text-[13.5px] leading-snug text-[#6b4700]">
+        <span className="font-semibold">Mayoristas:</span> precio por mayor desde{" "}
+        {datos.productos.map((p) => `${cantidad(p.minMayor, p.unidad)} de ${p.nombre.split(" ")[0].toLowerCase()}`).join(", ")}. Si piden menos, se cobra precio detalle.
+      </div>
       <input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar cliente"
         className="w-full rounded-[16px] border border-linea bg-white px-4 py-3.5 text-[16px] outline-none focus:border-palta" />
       <ul className="mt-3 flex flex-col gap-2">

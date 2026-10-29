@@ -1,4 +1,4 @@
-import type { Datos, Linea, Pedido } from "./tipos";
+import { precioPara, type Datos, type Linea, type Pedido } from "./tipos";
 
 /**
  * Datos de ejemplo para mostrar la app: clientes y pedidos inventados, con
@@ -14,14 +14,10 @@ const dia = (offset: number) => {
 
 export function datosDeEjemplo(): Datos {
   const productos = [
-    { id: "palta", nombre: "Palta Hass", unidad: "kg", precioDetalle: 3500, precioMayor: 2800, stock: 46, alerta: 20, disponible: true, emoji: "🥑" },
-    { id: "huevo", nombre: "Huevos de campo", unidad: "bandeja", precioDetalle: 6500, precioMayor: 5400, stock: 12, alerta: 15, disponible: true, emoji: "🥚" },
-    { id: "queso", nombre: "Queso de cabra", unidad: "unidad", precioDetalle: 7000, precioMayor: 6000, stock: 4, alerta: 3, disponible: true, emoji: "🧀" },
+    { id: "palta", nombre: "Palta Hass", unidad: "kg", precioDetalle: 3500, precioMayor: 2800, minMayor: 10, stock: 46, alerta: 20, disponible: true, emoji: "🥑" },
+    { id: "huevo", nombre: "Huevos de campo", unidad: "bandeja", precioDetalle: 6500, precioMayor: 5400, minMayor: 5, stock: 12, alerta: 15, disponible: true, emoji: "🥚" },
+    { id: "queso", nombre: "Queso de cabra", unidad: "unidad", precioDetalle: 7000, precioMayor: 6000, minMayor: 3, stock: 4, alerta: 3, disponible: true, emoji: "🧀" },
   ];
-  const precio = (id: string, mayor: boolean) => {
-    const p = productos.find((x) => x.id === id)!;
-    return mayor ? p.precioMayor : p.precioDetalle;
-  };
 
   const clientes = [
     { id: "c1", nombre: "Almacén Don Tito", tipo: "mayorista" as const, telefono: "56911111111", direccion: "Av. Francisco de Aguirre 1240, La Serena" },
@@ -32,11 +28,11 @@ export function datosDeEjemplo(): Datos {
     { id: "c6", nombre: "Café Mirador", tipo: "mayorista" as const, telefono: "56966666666", direccion: "Av. del Mar 3100, La Serena", nota: "Entregar antes de las 9" },
     { id: "c7", nombre: "Lucía Fernández", tipo: "detalle" as const, telefono: "56977777777", direccion: "Los Pinos 45" },
   ];
-  const mayor = (cid: string) => clientes.find((c) => c.id === cid)!.tipo === "mayorista";
+  const tipo = (cid: string) => clientes.find((c) => c.id === cid)!.tipo;
 
   let n = 0;
   const pedido = (clienteId: string, offset: number, items: [string, number][], pago: "todo" | "nada" | number, entregado: boolean): Pedido => {
-    const lineas: Linea[] = items.map(([productoId, cantidad]) => ({ productoId, cantidad, precio: precio(productoId, mayor(clienteId)) }));
+    const lineas: Linea[] = items.map(([productoId, cantidad]) => ({ productoId, cantidad, precio: precioPara(productos.find((x) => x.id === productoId)!, tipo(clienteId), cantidad) }));
     const total = lineas.reduce((s, l) => s + l.cantidad * l.precio, 0);
     n++;
     return {

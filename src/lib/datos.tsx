@@ -10,7 +10,7 @@ import type { Cliente, Datos, Pedido, Producto } from "./tipos";
  * las pantallas, porque todas usan este mismo contexto.
  */
 
-const CLAVE = "fresco:datos:v1";
+const CLAVE = "fresco:datos:v2";
 
 type Acciones = {
   datos: Datos;

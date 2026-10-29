@@ -7,6 +7,8 @@ export type Producto = {
   unidad: string;
   precioDetalle: number;
   precioMayor: number;
+  /** desde esta cantidad un mayorista paga precio por mayor; antes, precio detalle */
+  minMayor: number;
   stock: number;
   /** bajo esta cantidad, la app avisa que queda poco */
   alerta: number;
@@ -53,5 +55,9 @@ export const deudaPedido = (p: Pedido) => Math.max(0, totalPedido(p) - p.pagado)
 /** "1 bandeja", "3 bandejas", "2 unidades"; el kilo no cambia */
 export const cantidad = (n: number, unidad: string) =>
   `${n} ${n === 1 || unidad === "kg" ? unidad : unidad === "unidad" ? "unidades" : unidad + "s"}`;
+
+/** El precio que corresponde: por mayor solo si es mayorista y llega al mínimo. */
+export const precioPara = (p: Producto, tipo: TipoCliente | undefined, cant: number) =>
+  tipo === "mayorista" && cant >= p.minMayor ? p.precioMayor : p.precioDetalle;
 
 export const pesos = (n: number) => "$" + Math.round(n).toLocaleString("es-CL");
