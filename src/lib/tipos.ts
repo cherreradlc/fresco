@@ -9,6 +9,8 @@ export type Producto = {
   precioMayor: number;
   /** desde esta cantidad un mayorista paga precio por mayor; antes, precio detalle */
   minMayor: number;
+  /** lo que le cuesta a él cada unidad: para sacar costos y utilidades */
+  costo: number;
   stock: number;
   /** bajo esta cantidad, la app avisa que queda poco */
   alerta: number;
@@ -43,10 +45,34 @@ export type Pedido = {
   creado: string;
 };
 
+/** Una factura electrónica, emitida (venta) o recibida (compra). */
+export type Factura = {
+  id: string;
+  tipo: "venta" | "compra";
+  folio: number;
+  rut: string;
+  razonSocial: string;
+  fecha: string;
+  vencimiento: string;
+  neto: number;
+  iva: number;
+  total: number;
+  pagado: number;
+  /** compras: mercadería para vender o gasto del negocio */
+  categoria?: "mercaderia" | "gasto";
+  /** cómo llegó: sincronizada desde el SII o anotada a mano */
+  origen: "sii" | "manual";
+};
+
 export type Datos = {
   productos: Producto[];
   clientes: Cliente[];
   pedidos: Pedido[];
+  facturas: Factura[];
+  /** ventas totales de meses anteriores, para la proyección */
+  historico: { mes: string; ventas: number }[];
+  caja: number;
+  ultimaSync?: string;
 };
 
 export const totalPedido = (p: Pedido) => p.lineas.reduce((s, l) => s + l.cantidad * l.precio, 0);

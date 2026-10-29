@@ -54,6 +54,11 @@ const PATHS = {
   stock: <path d="M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8" />,
   resumen: <path d="M5 19V11M10 19V5M15 19v-6M20 19V9" />,
   tienda: <path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6" />,
+  finanzas: (
+    <>
+      <path d="M4 20h16M6 16v-5M10 16V8M14 16v-3M18 16V5" />
+    </>
+  ),
   telefono: <path d="M6 3h3l1.5 5-2 1.5a11 11 0 0 0 6 6l1.5-2 5 1.5v3a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2z" />,
 } as const;
 
@@ -87,7 +92,7 @@ export function Pantalla({ titulo, atras, accion, children }: { titulo: string; 
             const activa =
               t.href === "/" ? ruta === "/"
               : t.href === "/pedidos" ? ruta === "/pedidos"
-              : t.href === "/mas" ? ["/mas", "/clientes", "/stock", "/resumen"].some((r) => ruta.startsWith(r))
+              : t.href === "/mas" ? ["/mas", "/clientes", "/stock", "/resumen", "/finanzas"].some((r) => ruta.startsWith(r))
               : ruta.startsWith(t.href);
             return (
               <li key={t.href}>

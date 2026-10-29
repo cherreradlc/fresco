@@ -5,6 +5,7 @@ import { Icono, Pantalla } from "@/components/ui";
 import { useDatos } from "@/lib/datos";
 
 const SECCIONES = [
+  { href: "/finanzas", icono: "finanzas" as const, titulo: "Finanzas y SII", texto: "Facturas, resultados, proyección y libros" },
   { href: "/clientes", icono: "clientes" as const, titulo: "Clientes", texto: "Fichas, historial y quién dejó de comprar" },
   { href: "/stock", icono: "stock" as const, titulo: "Stock", texto: "Cuánto queda y lo que llega" },
   { href: "/resumen", icono: "resumen" as const, titulo: "Resumen", texto: "Ventas del mes y mejores clientes" },

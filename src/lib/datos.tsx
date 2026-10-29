@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { datosDeEjemplo } from "./ejemplo";
+import { datosDeEjemplo, facturasNuevasSII } from "./ejemplo";
 import type { Cliente, Datos, Pedido, Producto } from "./tipos";
 
 /**
@@ -10,7 +10,7 @@ import type { Cliente, Datos, Pedido, Producto } from "./tipos";
  * las pantallas, porque todas usan este mismo contexto.
  */
 
-const CLAVE = "fresco:datos:v2";
+const CLAVE = "fresco:datos:v4";
 
 type Acciones = {
   datos: Datos;
@@ -23,6 +23,9 @@ type Acciones = {
   guardarCliente: (c: Omit<Cliente, "id"> & { id?: string }) => Cliente;
   actualizarProducto: (id: string, cambios: Partial<Producto>) => void;
   reiniciar: () => void;
+  /** demostración: trae facturas como si vinieran del SII */
+  sincronizarSII: () => Promise<number>;
+  pagarFactura: (id: string) => void;
 };
 
 const Ctx = createContext<Acciones | null>(null);
@@ -30,7 +33,7 @@ const Ctx = createContext<Acciones | null>(null);
 const nuevoId = (p: string) => p + Math.random().toString(36).slice(2, 9);
 
 export function DatosProvider({ children }: { children: ReactNode }) {
-  const [datos, setDatos] = useState<Datos>({ productos: [], clientes: [], pedidos: [] });
+  const [datos, setDatos] = useState<Datos>({ productos: [], clientes: [], pedidos: [], facturas: [], historico: [], caja: 0 });
   const [listo, setListo] = useState(false);
 
   // leer lo guardado (solo existe en el navegador)
@@ -118,9 +121,30 @@ export function DatosProvider({ children }: { children: ReactNode }) {
 
   const reiniciar = useCallback(() => setDatos(datosDeEjemplo()), []);
 
+  const sincronizarSII = useCallback(async () => {
+    await new Promise((r) => setTimeout(r, 1600));
+    let nuevas = 0;
+    setDatos((d) => {
+      const yaEstan = new Set(d.facturas.map((f) => f.tipo + f.folio));
+      const llegan = d.ultimaSync ? [] : facturasNuevasSII().filter((f) => !yaEstan.has(f.tipo + f.folio));
+      nuevas = llegan.length;
+      return { ...d, facturas: [...llegan, ...d.facturas], ultimaSync: new Date().toISOString() };
+    });
+    await new Promise((r) => setTimeout(r, 0));
+    return nuevas;
+  }, []);
+
+  const pagarFactura = useCallback((id: string) => {
+    setDatos((d) => ({
+      ...d,
+      caja: d.caja + (d.facturas.find((f) => f.id === id)?.tipo === "venta" ? 1 : -1) * Math.max(0, (d.facturas.find((f) => f.id === id)?.total ?? 0) - (d.facturas.find((f) => f.id === id)?.pagado ?? 0)),
+      facturas: d.facturas.map((f) => (f.id === id ? { ...f, pagado: f.total } : f)),
+    }));
+  }, []);
+
   const valor = useMemo(
-    () => ({ datos, listo, guardarPedido, marcarEntregado, registrarPago, pagarCliente, guardarCliente, actualizarProducto, reiniciar }),
-    [datos, listo, guardarPedido, marcarEntregado, registrarPago, pagarCliente, guardarCliente, actualizarProducto, reiniciar],
+    () => ({ datos, listo, guardarPedido, marcarEntregado, registrarPago, pagarCliente, guardarCliente, actualizarProducto, reiniciar, sincronizarSII, pagarFactura }),
+    [datos, listo, guardarPedido, marcarEntregado, registrarPago, pagarCliente, guardarCliente, actualizarProducto, reiniciar, sincronizarSII, pagarFactura],
   );
   // las pantallas recién se dibujan con los datos del celular y la hora real:
   // antes de eso (y al armar la página en el servidor) se ve la bienvenida
