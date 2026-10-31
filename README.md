@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fresco
 
-## Getting Started
+A mobile-first sales app for a small food business: a seller of avocados, eggs and goat cheese who works wholesale and retail and, until now, kept everything in a paper notebook.
 
-First, run the development server:
+**[Live demo →](https://fresco-demo-five.vercel.app)** · [Case study](https://consueloherreradesign.vercel.app/proyectos/fresco)
+
+![Home, new order, payments and finances screens](docs/screens.png)
+
+> Working prototype designed and built by [Consuelo Herrera](https://consueloherreradesign.vercel.app) as a proposal for a real business. The demo runs on sample data; the sync with Chile's tax office (SII) is simulated.
+
+## What it does
+
+- **Orders in seconds.** Pick a client, add products and save. Wholesale pricing kicks in automatically once a wholesale client reaches the minimum quantity.
+- **Partial payments and debts.** Each order tracks delivery and payment separately ("paid $20,000 · owes $14,500"). A collections screen lists who owes what and since when, with a one-tap WhatsApp reminder.
+- **Stock that updates itself** with every sale.
+- **Finances in plain words.** Invoices to collect and to pay, an income statement, a simplified balance sheet, best sellers and a three-month sales projection.
+- **Books for the accountant.** Sales, purchases and journal ledgers download as CSV files that open in Excel.
+- **Installable.** It installs on the phone like a native app and keeps its data on the device.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Web App Manifest (PWA) · deployed on Vercel.
+
+Data lives in the browser's `localStorage` behind a single React context, so the prototype needs no backend.
+
+## Code tour
+
+| Where | What |
+| --- | --- |
+| `src/lib/tipos.ts` | Data model (products, clients, orders, invoices) and pricing rules such as `precioPara()` |
+| `src/lib/calculos.ts` | Debts per client, sales by period, WhatsApp links |
+| `src/lib/finanzas.ts` | Income statement, balance, best sellers, sales projection (least-squares trend) and CSV ledgers |
+| `src/lib/datos.tsx` | State provider: orders, payments, stock and the simulated SII sync |
+| `src/lib/ejemplo.ts` | Sample data for the demo |
+| `src/components/ui.tsx` | Shared UI: screen layout, bottom navigation, cards, status labels |
+| `src/app/*` | One folder per screen: orders, collections, clients, stock, finances, catalogue |
+
+Names in the code follow the business vocabulary in Spanish (`pedido` = order, `cliente` = client, `deuda` = debt), the language the app is used in.
+
+## Run it locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Then open [http://localhost:3000](http://localhost:3000). "Más → Volver a los datos de ejemplo" resets the sample data.
