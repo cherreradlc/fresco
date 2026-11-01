@@ -38,7 +38,7 @@ export default function Catalogo() {
         <span className="relative flex size-16 items-center justify-center rounded-[20px] bg-brote shadow-[0_6px_16px_-8px_rgb(0_0_0/0.4)]">
           <Logo className="h-11 w-auto" />
         </span>
-        <h1 className="relative mt-3 font-display text-[34px] leading-none font-semibold">Fresco</h1>
+        <h1 className="relative mt-3 font-display text-[40px] leading-none font-extrabold tracking-[-0.035em]">fresco</h1>
         <p className="relative mt-2 text-[15.5px] opacity-90">Paltas, huevos de campo y queso de cabra. Despacho en La Serena y Coquimbo.</p>
       </header>
 

@@ -36,7 +36,7 @@ export default function Ingresar() {
         <span className="flex size-28 items-center justify-center rounded-[32px] bg-brote shadow-[0_18px_40px_-22px_rgb(43_74_22/0.6)]">
           <Logo className="h-20 w-auto" />
         </span>
-        <h1 className="mt-5 font-display text-[44px] leading-none font-semibold tracking-[-0.03em] text-palta">Fresco</h1>
+        <h1 className="mt-5 font-display text-[52px] leading-none font-extrabold tracking-[-0.035em] text-palta">fresco</h1>
         <p className="mt-2 text-[15.5px] text-tinta-suave">Pedidos, cobros y stock en tu celular.</p>
       </div>
 
