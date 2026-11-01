@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Logo from "@/components/Logo";
 import { Icono } from "@/components/ui";
 import { whatsapp } from "@/lib/calculos";
 import { useDatos } from "@/lib/datos";
@@ -34,8 +35,10 @@ export default function Catalogo() {
       <header className="relative overflow-hidden rounded-b-[32px] bg-palta px-6 pt-[max(env(safe-area-inset-top),28px)] pb-8 text-crema">
         <span className="absolute -top-10 -right-8 h-40 w-40 rounded-full bg-palta-clara/30" aria-hidden="true" />
         <span className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-yema/30" aria-hidden="true" />
-        <p className="relative text-[40px]" aria-hidden="true">🥑🥚</p>
-        <h1 className="relative mt-2 font-display text-[34px] leading-none font-semibold">Fresco</h1>
+        <span className="relative flex size-16 items-center justify-center rounded-[20px] bg-brote shadow-[0_6px_16px_-8px_rgb(0_0_0/0.4)]">
+          <Logo className="h-11 w-auto" />
+        </span>
+        <h1 className="relative mt-3 font-display text-[34px] leading-none font-semibold">Fresco</h1>
         <p className="relative mt-2 text-[15.5px] opacity-90">Paltas, huevos de campo y queso de cabra. Despacho en La Serena y Coquimbo.</p>
       </header>
 

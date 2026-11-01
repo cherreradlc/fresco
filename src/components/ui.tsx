@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { useSesion } from "@/lib/sesion";
 
 /** Íconos de línea, todos del mismo grosor. */
 export function Icono({ nombre, size = 24 }: { nombre: keyof typeof PATHS; size?: number }) {
@@ -73,6 +74,9 @@ const TABS = [
 /** La pantalla de la app: título arriba, contenido y la barra de abajo. */
 export function Pantalla({ titulo, atras, accion, children }: { titulo: string; atras?: string; accion?: ReactNode; children: ReactNode }) {
   const ruta = usePathname();
+  // la app del dueño pide iniciar sesión (demo); mientras se revisa no se muestra nada
+  const sesion = useSesion();
+  if (!sesion) return <div className="min-h-[100svh]" aria-busy="true" />;
   return (
     <div className="mx-auto flex min-h-[100svh] max-w-md flex-col">
       <header className="sticky top-0 z-20 flex items-center gap-3 bg-crema/90 px-5 pt-[max(env(safe-area-inset-top),16px)] pb-3 backdrop-blur">

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import { Cargando, Etiqueta, Icono, Pantalla, Tarjeta, Titulo } from "@/components/ui";
 import { deudores, finDelDia, inicioDelDia, inicioDelMes, mismoDia, totalDeuda, ventas } from "@/lib/calculos";
 import { useDatos } from "@/lib/datos";
@@ -11,7 +12,9 @@ export default function Inicio() {
   const { datos, listo, marcarEntregado } = useDatos();
   const saludo = new Date().getHours() < 12 ? "Buenos días" : new Date().getHours() < 20 ? "Buenas tardes" : "Buenas noches";
 
-  if (!listo) return <Pantalla titulo={saludo}><Cargando /></Pantalla>;
+  const marca = <Logo className="h-10 w-auto" />;
+
+  if (!listo) return <Pantalla titulo={saludo} accion={marca}><Cargando /></Pantalla>;
 
   const deuda = totalDeuda(datos);
   const hoy = ventas(datos, inicioDelDia(), finDelDia());
@@ -21,7 +24,7 @@ export default function Inicio() {
   const bajos = datos.productos.filter((p) => p.disponible && p.stock <= p.alerta);
 
   return (
-    <Pantalla titulo={saludo}>
+    <Pantalla titulo={saludo} accion={marca}>
       <p className="-mt-1 text-[15px] text-tinta-suave">
         {new Date().toLocaleDateString("es-CL", { weekday: "long", day: "numeric", month: "long" })}
       </p>

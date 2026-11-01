@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icono, Pantalla } from "@/components/ui";
 import { useDatos } from "@/lib/datos";
+import { cerrarSesion } from "@/lib/sesion";
 
 const SECCIONES = [
   { href: "/finanzas", icono: "finanzas" as const, titulo: "Finanzas y SII", texto: "Facturas, resultados, proyección y libros" },
@@ -14,6 +16,7 @@ const SECCIONES = [
 
 export default function Mas() {
   const { reiniciar } = useDatos();
+  const router = useRouter();
   return (
     <Pantalla titulo="Más">
       <ul className="flex flex-col gap-2.5">
@@ -33,6 +36,10 @@ export default function Mas() {
       <button type="button" onClick={() => { if (confirm("¿Volver a los datos de ejemplo? Se borra lo que anotaste.")) reiniciar(); }}
         className="toque mt-8 w-full rounded-[16px] border border-dashed border-linea py-3.5 text-[14.5px] text-tinta-suave">
         Volver a los datos de ejemplo
+      </button>
+      <button type="button" onClick={() => { cerrarSesion(); router.replace("/ingresar"); }}
+        className="toque mt-3 w-full rounded-[16px] py-3.5 text-[14.5px] font-medium text-deuda">
+        Cerrar sesión
       </button>
     </Pantalla>
   );
