@@ -4,7 +4,7 @@ A mobile-first sales app for a small food business: a seller of avocados, eggs a
 
 **[Live demo →](https://fresco-demo-five.vercel.app)** · [Case study](https://consueloherreradesign.vercel.app/proyectos/fresco)
 
-![Home, new order, payments and finances screens](docs/screens.png)
+![Sign-in with the logo, home, new order, payments and finances screens](docs/screens.png)
 
 > Working prototype designed and built by [Consuelo Herrera](https://consueloherreradesign.vercel.app) as a proposal for a real business. The demo runs on sample data; the sync with Chile's tax office (SII) is simulated.
 
